@@ -25,8 +25,8 @@ public class LineProcessor implements ItemProcessor<String, JSONObject> {
         double sd = Calculator.calculateStandardDeviation(v);
         DecimalFormat df = new DecimalFormat("#.##");
 
-        json.put("sum", sum);
-        json.put("average", avg);
+        json.put("sum", df.format(sum));
+        json.put("average", df.format(avg));
         json.put("std_deviation", df.format(sd));
 
         return json;
