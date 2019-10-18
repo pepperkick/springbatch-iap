@@ -19,6 +19,7 @@ import org.springframework.batch.item.file.transform.PassThroughLineAggregator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.Date;
 
@@ -58,13 +59,19 @@ public class BatchConfig {
 
     @Bean
     public Step processStep() {
+        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        taskExecutor.setCorePoolSize(5);
+        taskExecutor.setMaxPoolSize(5);
+        taskExecutor.initialize();
+
         return stepBuilderFactory.
             get("batchStep").
             allowStartIfComplete(true).
-            <String, JSONObject> chunk(5000).
+            <String, JSONObject> chunk(250).
             reader(createFileReader()).
             writer(createFileWriter()).
             processor(new LineProcessor()).
+            taskExecutor(taskExecutor).
             build();
     }
 
