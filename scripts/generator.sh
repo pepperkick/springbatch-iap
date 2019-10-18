@@ -4,6 +4,7 @@ clear
 
 lines=${LINES:="10"}
 file=${FILE_PATH:="../input.txt"}
+output=""
 
 echo "Number of lines to generate: $lines"
 
@@ -15,9 +16,11 @@ do
     for j in $(seq 0 ${max})
     do
         if [[ "$j" != "0" ]]; then
-            echo -n "," >> ${file}
+            output="${output},"
         fi
-        echo -n "$RANDOM" >> ${file}
+        output="${output}$RANDOM"
     done
-    echo "" >> ${file}
+    echo "$output" >> ${file}
+    output=""
 done
+
